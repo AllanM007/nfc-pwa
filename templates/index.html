@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Hello!</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+  </head>  
+  <body>
+    <h1>
+      InstallableNFCReader
+    </h1>
+    <p id="requireHTTPS" class="hidden">
+      <b>STOP!</b> This page <b>must</b> be served over HTTPS.
+      Please <a>reload this page via HTTPS</a>.
+    </p>
+    <p>
+        <button id="btn-add">Install</button>
+    </p>
+    <p>
+      <button id="scanButton">Enable NFC</button>
+    </p>
+    <p>
+      Make me installable, follow the 
+      <a href="https://web.dev/codelab-make-installable/">instructions</a> here.
+    </p>
+    <!-- Install button, hidden by default -->
+    <div id="installContainer" class="hidden">
+      <button id="butInstall" type="button">
+        Install
+      </button>
+    </div>
+  </body>
+  <script type="text/javascript" src="{{url_for('static', filename='js/index.js')}}"></script>
+</html>
