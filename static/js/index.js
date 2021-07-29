@@ -91,3 +91,11 @@
     //   console.log(`Write failed :-( try again: ${error}.`);
     // });
   }
+
+const getFileBtn = document.getElementById("fs-get")
+
+getFileBtn.onclick = async () => {
+  const [handle] = await window.showOpenFilePicker();
+  const file = await handle.getFile();
+  console.log(file);
+}
