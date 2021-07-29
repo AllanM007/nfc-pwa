@@ -56,55 +56,38 @@
   });
 
   document.querySelector("#scanButton").onclick = async () => {
-    const ndef = new NDEFReader();
-    // Prompt user to allow website to interact with NFC devices.
-    await ndef.scan();
-    ndef.onreading = event => {
-      // TODO: Handle incoming NDEF messages.
-    };
+    if ('NDEFReader' in window) {
+      const ndef = new NDEFReader();
+  
+      ndef.scan().then(() => {
+        console.log("Scan started successfully.");
+        ndef.onreadingerror = () => {
+          console.log("Cannot read data from the NFC tag. Try another one?");
+        };
+        ndef.onreading = event => {
+          const message = event.message;
+          for (const record of message.records) {
+            console.log(message.records[0].data.buffer);
+            var data = new Uint8Array(message.records[0].data.buffer);
+            var str ="";
+            data.forEach(element => {
+              str +=String.fromCharCode(element) 
+            });
+            var json = JSON.parse(str);
+            console.log(json.reg);
+            console.log(json.nfcid);
+          }
+        };
+      }).catch(error => {
+        console.log(`Error! Scan failed to start: ${error}.`);
+      });
   };
 
-
-  if ('NDEFReader' in window) {
-    const ndef = new NDEFReader();
-    ndef.scan().then(() => {
-      console.log("Scan started successfully.");
-      ndef.onreadingerror = () => {
-        console.log("Cannot read data from the NFC tag. Try another one?");
-      };
-      ndef.onreading = event => {
-        const message = event.message;
-        for (const record of message.records) {
-          console.log(message.records[0].data.buffer);
-          var data = new Uint8Array(message.records[0].data.buffer);
-          var str ="";
-          data.forEach(element => {
-            str +=String.fromCharCode(element) 
-          });
-          var json = JSON.parse(str);
-          console.log(json.reg);
-          console.log(json.nfcid);
-          // console.log(message.records[0].data.buffer.byteLength);
-          // for(var i=0; i<message.records[0].data.buffer.byteLength; i++)  {
-          //   data +=String.fromCharCode(message.records[0].data.buffer."[[Int8Array]]"[i]) 
-          // };
-          // console.log(data);
-          // console.log("Record type:  " + record.recordType);
-          // console.log("MIME type:    " + record.mediaType);
-          // console.log("Record id:    " + record.id);
-          switch (record.recordType) {
-            case "text":
-              // TODO: Read text record with record data, lang, and encoding.
-              break;
-            case "url":
-              // TODO: Read URL record with record data.
-              break;
-            default:
-              // TODO: Handle other records with record data.
-          }
-        }
-      };
-    }).catch(error => {
-      console.log(`Error! Scan failed to start: ${error}.`);
-    });
+    // ndef.write(
+    //   "Hello World"
+    // ).then(() => {
+    //   console.log("Message written.");
+    // }).catch(error => {
+    //   console.log(`Write failed :-( try again: ${error}.`);
+    // });
   }
